@@ -1,43 +1,39 @@
 pub mod day_01;
 
-/// Trait que chaque jour doit implémenter
 pub trait Day {
-    fn day_number(&self) -> u8;
-    fn title(&self) -> &str;
-    fn solve_part1(&self, input: &str) -> String;
-    fn solve_part2(&self, input: &str) -> String;
+    fn titre(&self) -> &str;
+    fn partie1(&self, input: &str) -> String;
+    fn partie2(&self, input: &str) -> String;
 }
 
-/// Liste des jours disponibles
-pub fn available_days() -> Vec<Box<dyn Day>> {
-    vec![
-        Box::new(day_01::Day01),
-    ]
+pub fn liste_jours_implementes() -> Vec<u8> {
+    vec![1]
 }
 
-/// Exécute un jour spécifique
-pub fn run_day(day: u8) -> Result<(), String> {
-    let days = available_days();
-
-    let day_impl = days.iter()
-        .find(|d| d.day_number() == day)
-        .ok_or_else(|| format!("Jour {} non implémenté", day))?;
-
-    let input = load_input(day)?;
-
-    println!("\n═══════════════════════════════════════");
-    println!("  Jour {:02}: {}", day, day_impl.title());
-    println!("═══════════════════════════════════════\n");
-
-    println!("Partie 1: {}", day_impl.solve_part1(&input));
-    println!("Partie 2: {}", day_impl.solve_part2(&input));
-
-    Ok(())
+pub fn get_titre(jour: u8) -> String {
+    match jour {
+        1 => day_01::Day01.titre().to_string(),
+        _ => "Non implemente".to_string(),
+    }
 }
 
-/// Charge l'input pour un jour donné
-fn load_input(day: u8) -> Result<String, String> {
-    let path = format!("inputs/day_{:02}.txt", day);
-    std::fs::read_to_string(&path)
-        .map_err(|_| format!("Fichier input non trouvé: {}", path))
+pub fn executer(jour: u8) -> Result<(String, String), String> {
+    let input = charger_input(jour)?;
+    
+    match jour {
+        1 => {
+            let d = day_01::Day01;
+            Ok((d.partie1(&input), d.partie2(&input)))
+        }
+        _ => Err(format!("Jour {} non implemente", jour)),
+    }
+}
+
+fn charger_input(jour: u8) -> Result<String, String> {
+    let chemin = format!("inputs/day_{:02}.txt", jour);
+    
+    match std::fs::read_to_string(&chemin) {
+        Ok(contenu) => Ok(contenu),
+        Err(_) => Err(format!("Fichier non trouve: {}", chemin)),
+    }
 }

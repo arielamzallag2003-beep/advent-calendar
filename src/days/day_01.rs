@@ -3,22 +3,16 @@ use super::Day;
 pub struct Day01;
 
 impl Day for Day01 {
-    fn day_number(&self) -> u8 {
-        1
+    fn titre(&self) -> &str {
+        "Template"
     }
 
-    fn title(&self) -> &str {
-        "Template - À implémenter"
+    fn partie1(&self, _input: &str) -> String {
+        "Non implemente".to_string()
     }
 
-    fn solve_part1(&self, _input: &str) -> String {
-        // TODO: Implémenter la solution partie 1
-        "Non implémenté".to_string()
-    }
-
-    fn solve_part2(&self, _input: &str) -> String {
-        // TODO: Implémenter la solution partie 2
-        "Non implémenté".to_string()
+    fn partie2(&self, _input: &str) -> String {
+        "Non implemente".to_string()
     }
 }
 
@@ -27,16 +21,14 @@ mod tests {
     use super::*;
 
     #[test]
-    fn test_part1() {
-        let day = Day01;
-        let input = "";
-        assert_eq!(day.solve_part1(input), "Non implémenté");
+    fn test_partie1() {
+        let d = Day01;
+        assert_eq!(d.partie1(""), "Non implemente");
     }
 
     #[test]
-    fn test_part2() {
-        let day = Day01;
-        let input = "";
-        assert_eq!(day.solve_part2(input), "Non implémenté");
+    fn test_partie2() {
+        let d = Day01;
+        assert_eq!(d.partie2(""), "Non implemente");
     }
 }
