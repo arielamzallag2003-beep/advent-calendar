@@ -2,6 +2,7 @@ pub const NOM: &str = "Exercice 1: FizzBuzz";
 
 pub fn run() -> String {
     let mut resultat = Vec::new();  
+    let mut resultat_match = Vec::new(); 
     
     for i in 0..=150 {
         if i % 15 == 0 {
@@ -14,6 +15,20 @@ pub fn run() -> String {
             resultat.push(i.to_string());
         }
     }
+
+    for i in 0..=150 {
+        let s = match (i % 3, i % 5) {
+            (0, 0) => "FizzBuzz".to_string(),
+            (0, _) => "Fizz".to_string(),
+            (_, 0) => "Buzz".to_string(),
+            _ => i.to_string(),
+        };
+        resultat_match.push(s);
+    }
     
-    resultat.join(", ")
-}	
+    format!(
+        "If/Else: {}\n\nMatch: {}",
+        resultat.join(", "),
+        resultat_match.join(", ")
+    )
+}
