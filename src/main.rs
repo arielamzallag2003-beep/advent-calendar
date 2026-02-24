@@ -29,15 +29,15 @@ fn main() {
             }
             _ => {
                 match choix.parse::<u8>() {
-                    Ok(jour) if (1..=12).contains(&jour) => {
+                    Ok(jour) if jour >= 1 && jour <= 12 => {
                         menu_jour(jour);
                     }
                     Ok(jour) => {
-                        println!("\n  Jour {jour} invalide (1-12)");
+                        println!("\n  Jour {} invalide (1-12)", jour);
                         attendre_entree();
                     }
                     Err(_) => {
-                        println!("\n  Commande inconnue: {choix}");
+                        println!("\n  Commande inconnue: {}", choix);
                         attendre_entree();
                     }
                 }
@@ -63,9 +63,9 @@ fn afficher_menu() {
     
     for jour in 1..=12 {
         if jours_faits.contains(&jour) {
-            print!("[{jour:02}] ");
+            print!("[{:02}] ", jour);
         } else {
-            print!(" {jour:02}  ");
+            print!(" {:02}  ", jour);
         }
         
         if jour == 6 {
@@ -103,7 +103,7 @@ fn menu_exercices() {
             println!("  Aucun exercice disponible.");
         } else {
             for (id, nom) in &exos {
-                println!("    [{id}] {nom}");
+                println!("    [{}] {}", id, nom);
             }
         }
         
@@ -120,12 +120,15 @@ fn menu_exercices() {
             break;
         }
         
-        if let Ok(id) = choix.parse::<u8>() {
-            executer_exercice(id);
-            attendre_entree();
-        } else {
-            println!("\n  Commande inconnue: {choix}");
-            attendre_entree();
+        match choix.parse::<u8>() {
+            Ok(id) => {
+                executer_exercice(id);
+                attendre_entree();
+            }
+            Err(_) => {
+                println!("\n  Commande inconnue: {}", choix);
+                attendre_entree();
+            }
         }
     }
 }
@@ -135,7 +138,7 @@ fn executer_exercice(id: u8) {
     
     let nom = exercices::get_nom(id);
     println!("  +---------------------------------------------+");
-    println!("  | Exercice {id}: {nom:32} |");
+    println!("  | Exercice {}: {:32} |", id, nom);
     println!("  +---------------------------------------------+");
     
     let debut = Instant::now();
@@ -143,11 +146,11 @@ fn executer_exercice(id: u8) {
     match exercices::executer(id) {
         Ok(resultat) => {
             let duree = debut.elapsed();
-            println!("    Resultat: {resultat}");
+            println!("    Resultat: {}", resultat);
             println!("    Temps: {:.3}ms", duree.as_secs_f64() * 1000.0);
         }
         Err(erreur) => {
-            println!("    Erreur: {erreur}");
+            println!("    Erreur: {}", erreur);
         }
     }
 }
@@ -175,7 +178,6 @@ fn attendre_entree() {
     let _ = io::stdin().read_line(&mut input);
 }
 
-/// Sub-menu shown when the user selects a specific day.
 fn menu_jour(jour: u8) {
     loop {
         effacer_ecran();
@@ -185,13 +187,13 @@ fn menu_jour(jour: u8) {
 
         println!();
         println!("  +=============================================+");
-        println!("  | Jour {jour:02}: {titre:34} |");
+        println!("  | Jour {:02}: {:34} |", jour, titre);
         println!("  +=============================================+");
         println!();
         println!("  Commandes:");
-        println!("    r    Input reel  (inputs/day_{jour:02}.txt)");
+        println!("    r    Input reel  (inputs/day_{:02}.txt)", jour);
         if test_dispo {
-            println!("    t    Input test (inputs/day_{jour:02}_test.txt)");
+            println!("    t    Input test (inputs/day_{:02}_test.txt)", jour);
         } else {
             println!("    t    Input test [non disponible]");
         }
@@ -210,12 +212,12 @@ fn menu_jour(jour: u8) {
                 if test_dispo {
                     afficher_resultat_jour(jour, true);
                 } else {
-                    println!("\n  Cree d'abord inputs/day_{jour:02}_test.txt");
+                    println!("\n  Cree d'abord inputs/day_{:02}_test.txt", jour);
                 }
                 attendre_entree();
             }
             _ => {
-                println!("\n  Commande inconnue: {choix}");
+                println!("\n  Commande inconnue: {}", choix);
                 attendre_entree();
             }
         }
@@ -226,7 +228,7 @@ fn menu_jour(jour: u8) {
 fn afficher_resultat_jour(jour: u8, test: bool) {
     println!();
     let label = if test { "TEST" } else { "REEL" };
-    println!("  --- Input {label} ---");
+    println!("  --- Input {} ---", label);
 
     let debut = Instant::now();
     let resultat = if test {
@@ -238,12 +240,12 @@ fn afficher_resultat_jour(jour: u8, test: bool) {
     match resultat {
         Ok((partie1, partie2)) => {
             let duree = debut.elapsed();
-            println!("    Partie 1: {partie1}");
-            println!("    Partie 2: {partie2}");
+            println!("    Partie 1: {}", partie1);
+            println!("    Partie 2: {}", partie2);
             println!("    Temps: {:.3}ms", duree.as_secs_f64() * 1000.0);
         }
         Err(erreur) => {
-            println!("    Erreur: {erreur}");
+            println!("    Erreur: {}", erreur);
         }
     }
 }
@@ -253,7 +255,7 @@ fn executer_jour(jour: u8) {
     println!();
     println!("  +---------------------------------------------+");
     let titre = days::get_titre(jour);
-    println!("  | Jour {jour:02}: {titre:34} |");
+    println!("  | Jour {:02}: {:34} |", jour, titre);
     println!("  +---------------------------------------------+");
     afficher_resultat_jour(jour, false);
 }
@@ -285,7 +287,7 @@ fn afficher_liste() {
         let statut = if jours_faits.contains(&jour) { "[x]" } else { "[ ]" };
         let titre = days::get_titre(jour);
         
-        println!("  {statut} Jour {jour:02}: {titre}");
+        println!("  {} Jour {:02}: {}", statut, jour, titre);
     }
     
     println!();
