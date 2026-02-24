@@ -1,9 +1,9 @@
-use super::Day;
+use crate::days::Day;
 
 pub struct Day01;
 
 impl Day for Day01 {
-    fn titre(&self) -> &str {
+    fn titre(&self) -> &'static str {
         "Template"
     }
 
@@ -32,3 +32,4 @@ mod tests {
         assert_eq!(d.partie2(""), "Non implemente");
     }
 }
+

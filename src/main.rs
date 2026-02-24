@@ -1,5 +1,5 @@
-mod days;
-mod exercices;
+use advent_calendar::days;
+use advent_calendar::exercices;
 
 use std::io;
 use std::io::Write;
@@ -30,8 +30,7 @@ fn main() {
             _ => {
                 match choix.parse::<u8>() {
                     Ok(jour) if jour >= 1 && jour <= 12 => {
-                        executer_jour(jour);
-                        attendre_entree();
+                        menu_jour(jour);
                     }
                     Ok(jour) => {
                         println!("\n  Jour {} invalide (1-12)", jour);
@@ -179,21 +178,68 @@ fn attendre_entree() {
     let _ = io::stdin().read_line(&mut input);
 }
 
-fn executer_jour(jour: u8) {
+fn menu_jour(jour: u8) {
+    loop {
+        effacer_ecran();
+
+        let titre = days::get_titre(jour);
+        let test_dispo = days::test_input_existe(jour);
+
+        println!();
+        println!("  +=============================================+");
+        println!("  | Jour {:02}: {:34} |", jour, titre);
+        println!("  +=============================================+");
+        println!();
+        println!("  Commandes:");
+        println!("    r    Input reel  (inputs/day_{:02}.txt)", jour);
+        if test_dispo {
+            println!("    t    Input test (inputs/day_{:02}_test.txt)", jour);
+        } else {
+            println!("    t    Input test [non disponible]");
+        }
+        println!("    b    Retour");
+        println!("  ---------------------------------------------");
+
+        let choix = lire_entree();
+
+        match choix.as_str() {
+            "b" | "back" | "q" => break,
+            "r" | "" => {
+                afficher_resultat_jour(jour, false);
+                attendre_entree();
+            }
+            "t" => {
+                if test_dispo {
+                    afficher_resultat_jour(jour, true);
+                } else {
+                    println!("\n  Cree d'abord inputs/day_{:02}_test.txt", jour);
+                }
+                attendre_entree();
+            }
+            _ => {
+                println!("\n  Commande inconnue: {}", choix);
+                attendre_entree();
+            }
+        }
+    }
+}
+
+/// Run a day and print its results. `test` selects the test input file.
+fn afficher_resultat_jour(jour: u8, test: bool) {
     println!();
-    println!("  +---------------------------------------------+");
-    
-    let titre = days::get_titre(jour);
-    println!("  | Jour {:02}: {:34} |", jour, titre);
-    
-    println!("  +---------------------------------------------+");
-    
+    let label = if test { "TEST" } else { "REEL" };
+    println!("  --- Input {} ---", label);
+
     let debut = Instant::now();
-    
-    match days::executer(jour) {
+    let resultat = if test {
+        days::executer_test(jour)
+    } else {
+        days::executer(jour)
+    };
+
+    match resultat {
         Ok((partie1, partie2)) => {
             let duree = debut.elapsed();
-            
             println!("    Partie 1: {}", partie1);
             println!("    Partie 2: {}", partie2);
             println!("    Temps: {:.3}ms", duree.as_secs_f64() * 1000.0);
@@ -202,6 +248,16 @@ fn executer_jour(jour: u8) {
             println!("    Erreur: {}", erreur);
         }
     }
+}
+
+/// Used by "run all days" — always uses real input.
+fn executer_jour(jour: u8) {
+    println!();
+    println!("  +---------------------------------------------+");
+    let titre = days::get_titre(jour);
+    println!("  | Jour {:02}: {:34} |", jour, titre);
+    println!("  +---------------------------------------------+");
+    afficher_resultat_jour(jour, false);
 }
 
 fn executer_tous_les_jours() {

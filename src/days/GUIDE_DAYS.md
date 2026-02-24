@@ -1,19 +1,43 @@
 # Ajouter un jour
 
-## 1. Créer le fichier
+## Structure
 
-Créer `src/days/day_XX.rs` :
+Chaque jour vit dans son propre dossier :
+```
+src/
+  d1/mod.rs   ← jour 1 (implémenté)
+  d2/mod.rs   ← jour 2 (stub)
+  ...
+  d12/mod.rs  ← jour 12 (stub)
+```
+
+Les inputs restent dans `inputs/day_XX.txt`.
+
+---
+
+## 1. Implémenter le jour
+
+Ouvrir `src/dXX/mod.rs` et remplacer le stub par la vraie solution :
+
 ```rust
-pub const TITRE: &str = "Titre du jour";
+use crate::days::Day;
 
-pub fn partie1(input: &str) -> String {
-    // Code ici
-    "resultat".to_string()
-}
+pub struct DayXX;
 
-pub fn partie2(input: &str) -> String {
-    // Code ici
-    "resultat".to_string()
+impl Day for DayXX {
+    fn titre(&self) -> &str {
+        "Titre du puzzle"
+    }
+
+    fn partie1(&self, input: &str) -> String {
+        // logique ici
+        "resultat".to_string()
+    }
+
+    fn partie2(&self, input: &str) -> String {
+        // logique ici
+        "resultat".to_string()
+    }
 }
 ```
 
@@ -21,88 +45,32 @@ pub fn partie2(input: &str) -> String {
 
 Créer `inputs/day_XX.txt` avec les données du puzzle.
 
-## 3. Enregistrer dans mod.rs
+## 3. Déclarer comme implémenté
 
-Dans `src/days/mod.rs` :
+Dans `src/days/mod.rs`, ajouter le numéro du jour dans `liste_jours_implementes()` :
+
 ```rust
-pub mod day_XX;  // Ajouter en haut
-```
-
-Puis ajouter dans les 3 fonctions :
-```rust
-// liste_jours_implementes()
-vec![1, XX]
-
-// get_titre()
-XX => day_XX::TITRE.to_string(),
-
-// executer()
-XX => Ok((day_XX::partie1(&input), day_XX::partie2(&input))),
-```
-
-## Exemple complet
-
-`day_02.rs` :
-```rust
-pub const TITRE: &str = "Cube Conundrum";
-
-pub fn partie1(input: &str) -> String {
-    let resultat = input.lines().count();
-    resultat.to_string()
-}
-
-pub fn partie2(input: &str) -> String {
-    let resultat = input.len();
-    resultat.to_string()
-}
-```
-
-`mod.rs` :
-```rust
-pub mod day_01;
-pub mod day_02;
-
 pub fn liste_jours_implementes() -> Vec<u8> {
-    vec![1, 2]
-}
-
-pub fn get_titre(jour: u8) -> String {
-    match jour {
-        1 => day_01::TITRE.to_string(),
-        2 => day_02::TITRE.to_string(),
-        _ => "Non implemente".to_string(),
-    }
-}
-
-pub fn executer(jour: u8) -> Result<(String, String), String> {
-    let input = charger_input(jour)?;
-    
-    match jour {
-        1 => Ok((day_01::partie1(&input), day_01::partie2(&input))),
-        2 => Ok((day_02::partie1(&input), day_02::partie2(&input))),
-        _ => Err(format!("Jour {} non implemente", jour)),
-    }
-}
-
-fn charger_input(jour: u8) -> Result<String, String> {
-    let chemin = format!("inputs/day_{:02}.txt", jour);
-    
-    match std::fs::read_to_string(&chemin) {
-        Ok(contenu) => Ok(contenu),
-        Err(_) => Err(format!("Fichier non trouve: {}", chemin)),
-    }
+    vec![1, XX]  // ← ajouter XX ici
 }
 ```
+
+C'est tout ! `get_titre` et `executer` dans `mod.rs` référencent déjà tous les jours automatiquement.
+
+---
 
 ## Lancer
+
 ```bash
-cargo run
-# Menu > numero du jour
+cargo run --release          # menu principal
+cargo run --release --bin advent-calendar  # identique
+cargo test                   # tests unitaires
 ```
 
 ## Tests (optionnel)
 
-Ajouter à la fin de `day_XX.rs` :
+Ajouter à la fin de `src/dXX/mod.rs` :
+
 ```rust
 #[cfg(test)]
 mod tests {
@@ -112,17 +80,12 @@ mod tests {
 
     #[test]
     fn test_partie1() {
-        assert_eq!(partie1(EXEMPLE), "attendu");
+        assert_eq!(DayXX.partie1(EXEMPLE), "attendu");
     }
 
     #[test]
     fn test_partie2() {
-        assert_eq!(partie2(EXEMPLE), "attendu");
+        assert_eq!(DayXX.partie2(EXEMPLE), "attendu");
     }
 }
-```
-
-Lancer les tests :
-```bash
-cargo test
 ```

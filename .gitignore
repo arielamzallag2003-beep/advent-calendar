@@ -1,1 +1,4 @@
 /target
+
+# Puzzle inputs — keep local, don't commit
+inputs/*.txt

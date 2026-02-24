@@ -1,5 +1,6 @@
 pub const NOM: &str = "Exercice 2: Fibonacci";
 
+#[must_use] 
 pub fn run() -> String {
     let n = 42;
     let m = 51;
@@ -17,7 +18,7 @@ pub fn run() -> String {
 
 // itérative
 fn fibonacci(n: u32) -> u64 {
-    if n <= 1 { return n as u64; }
+    if n <= 1 { return u64::from(n); }
     
     let mut a = 0;
     let mut b = 1;
