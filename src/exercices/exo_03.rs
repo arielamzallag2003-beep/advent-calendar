@@ -1,5 +1,6 @@
 pub const NOM: &str = "Exercice 3: FizzBuzz N-ieme";
 
+#[must_use] 
 pub fn run() -> String {
     let a = 3;
     let b = 5;

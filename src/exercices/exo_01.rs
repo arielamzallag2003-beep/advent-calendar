@@ -1,5 +1,6 @@
 pub const NOM: &str = "Exercice 1: FizzBuzz";
 
+#[must_use] 
 pub fn run() -> String {
     let mut resultat = Vec::new();  
     let mut resultat_match = Vec::new(); 

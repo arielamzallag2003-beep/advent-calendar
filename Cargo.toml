@@ -2,5 +2,66 @@
 name = "advent-calendar"
 version = "0.1.0"
 edition = "2024"
+default-run = "advent-calendar"
+autobenches = false
 
 [dependencies]
+
+[dev-dependencies]
+criterion = { version = "0.5", features = ["html_reports"] }
+
+[[bin]]
+name = "advent-calendar"
+path = "src/main.rs"
+
+[[bin]]
+name = "run-all"
+path = "src/run_all.rs"
+
+[[bench]]
+name = "d01"
+harness = false
+
+[[bench]]
+name = "d02"
+harness = false
+
+[[bench]]
+name = "d03"
+harness = false
+
+[[bench]]
+name = "d04"
+harness = false
+
+[[bench]]
+name = "d05"
+harness = false
+
+[[bench]]
+name = "d06"
+harness = false
+
+[[bench]]
+name = "d07"
+harness = false
+
+[[bench]]
+name = "d08"
+harness = false
+
+[[bench]]
+name = "d09"
+harness = false
+
+[[bench]]
+name = "d10"
+harness = false
+
+[[bench]]
+name = "d11"
+harness = false
+
+[[bench]]
+name = "d12"
+harness = false
