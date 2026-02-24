@@ -1,4 +1,4 @@
 /target
-
-# Puzzle inputs — keep local, don't commit
 inputs/*.txt
+cheatsheet.html
+cheatsheet_linear.html

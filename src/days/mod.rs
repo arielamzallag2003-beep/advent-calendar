@@ -6,7 +6,7 @@ pub trait Day {
 
 #[must_use] 
 pub fn liste_jours_implementes() -> Vec<u8> {
-    vec![1]
+    vec![1, 2, 3]
 }
 
 #[must_use] 
