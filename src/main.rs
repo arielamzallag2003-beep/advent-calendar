@@ -191,7 +191,7 @@ fn menu_jour(jour: u8) {
         println!("  +=============================================+");
         println!();
         println!("  Commandes:");
-        println!("    r    Input reel  (inputs/day_{:02}.txt)", jour);
+        println!("    r    Input reel  (d{:02}/day_{:02}.txt)", jour, jour);
         if test_dispo {
             println!("    t    Input test (inputs/day_{:02}_test.txt)", jour);
         } else {

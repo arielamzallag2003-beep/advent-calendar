@@ -1,14 +1,32 @@
-use advent_calendar::d2::Day02;
-use advent_calendar::days::Day;
+use std::fs;
+
+use advent_calendar::d2::{v1, v2};
 use criterion::{black_box, criterion_group, criterion_main, Criterion};
 
-fn bench_d02(c: &mut Criterion) {
-    let input = std::fs::read_to_string("inputs/day_02.txt").unwrap_or_default();
-    let mut g = c.benchmark_group("Jour 02");
-    g.bench_function("partie1", |b| b.iter(|| Day02.partie1(black_box(&input))));
-    g.bench_function("partie2", |b| b.iter(|| Day02.partie2(black_box(&input))));
-    g.finish();
+fn bench_d1(c: &mut Criterion) {
+    let input = fs::read_to_string("inputs/day_02.txt")
+        .unwrap_or_else(|e| panic!("Impossible de lire inputs/day_02.txt: {e}"));
+
+    let mut group = c.benchmark_group("day1");
+
+    // v1
+    group.bench_function("v1_partie1", |b| {
+        b.iter(|| v1::partie1(black_box(&input)))
+    });
+    group.bench_function("v1_partie2", |b| {
+        b.iter(|| v1::partie2(black_box(&input)))
+    });
+
+    // v2
+    group.bench_function("v2_partie1", |b| {
+        b.iter(|| v2::partie1(black_box(&input)))
+    });
+    group.bench_function("v2_partie2", |b| {
+        b.iter(|| v2::partie2(black_box(&input)))
+    });
+
+    group.finish();
 }
 
-criterion_group!(benches, bench_d02);
+criterion_group!(benches, bench_d1);
 criterion_main!(benches);
