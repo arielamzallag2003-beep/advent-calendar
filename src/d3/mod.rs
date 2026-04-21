@@ -1,5 +1,9 @@
 use crate::days::Day;
 
+pub mod enzo;
+pub mod v1;
+pub mod v2;
+
 pub struct Day03;
 
 impl Day for Day03 {
