@@ -6,7 +6,7 @@ pub trait Day {
 
 #[must_use] 
 pub fn liste_jours_implementes() -> Vec<u8> {
-    vec![1, 2, 3]
+    vec![1, 2, 3, 4, 7, 10]
 }
 
 #[must_use] 
@@ -71,7 +71,7 @@ fn executer_sur(jour: u8, input: &str) -> Result<(String, String), String> {
     }
 }
 
-// Retourne toujours Ok (fichier manquant → chaîne vide, pas une erreur fatale)
+
 #[allow(clippy::unnecessary_wraps)]
 fn charger_input(jour: u8) -> Result<String, String> {
     let chemin = format!("inputs/day_{jour:02}.txt");
