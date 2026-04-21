@@ -1,1 +1,4 @@
 /target
+inputs/*.txt
+cheatsheet.html
+cheatsheet_linear.html
